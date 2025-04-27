@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Rubik:ital,wght@0,300..900;1,300..900&family=Smooch+Sans:wght@100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="assetst/fontello/css/fontello.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100%;
+            height: 70vh;
+            font-family: "Rubik", serif;
+            /* background: rgb(121, 7, 74);
+            background: linear-gradient(90deg, rgba(121, 7, 74, 1) 2%, rgba(240, 193, 225, 1) 100%, rgba(186, 15, 208, 0.9949229691876751) 100%); */
+            background-image: url(assetst/img/pink-acrylic-background-with-gold-elements.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        main {
+            width: 500px;
+            min-height: 350px;
+            background-color: #10101D;
+            margin: 150px auto 0; 
+            border-radius: 10px;
+            color: white;
+            box-shadow: 1px 1px 5px  white;
+
+            >h1 {
+                color: white;
+                width: 90%;
+                height: 50px;
+                padding: 20px;
+                padding-bottom: 0px;
+
+
+            }
+
+            >div {
+                width: 90%;
+                height: 90%;
+                margin: 20px auto;
+
+                /* border: 1px solid red; */
+                >input {
+                    border: none;
+                    background-color: inherit;
+                    width: 90%;
+                    height: 40px;
+                    border-bottom: 1px solid rgba(255, 255, 255, 0.904);
+                    padding-left: 5px;
+                    color: white;
+
+                    &:focus {
+                        outline: none;
+                        border: none;
+                        border-bottom: 1px solid rgba(255, 255, 255, 0.904);
+                    }
+
+                }
+
+                >button {
+                    width: 8%;
+                    height: 35px;
+                    background-color: rgb(231, 165, 176);
+                    border: none;
+                    border-radius: 50%;
+                    font-size: 22px;
+                    color: white;
+                    margin-top: 10px;
+                    margin-left: 5px;
+                    cursor: pointer;
+                    box-shadow: 0 0 12px 0 rgb(238 156 167 / 40%);
+                }
+
+                >ul {
+                    width: 100%;
+                    margin: 10px auto 0;
+
+                    >li {
+                        list-style-type: none;
+                        width: 100%;
+                        display: flex;
+                        height: 40px;
+                        background-color: #191933;
+                        margin-bottom: 8px;
+
+                        >* {
+                            height: 100%;
+                            display: flex;
+                            align-items: center;
+                        }
+
+                        >#h2 {
+                            width: 90%;
+                            background-color: inherit;
+                            color: white;
+                            margin-right: 10px;
+                            border: none;
+                            padding-left: 5px;
+                            font-size: 17px;
+
+                            &:focus {
+
+                                outline: none;
+                                border: none;
+                            }
+                        }
+
+                        >.tic {
+                            border-radius: 50%;
+                            background-color: inherit;
+                            border: none;
+                            display: flex;
+
+                            &:active {
+                                background-color: green;
+                            }
+
+                        }
+
+                        >.trash {
+                            color: red;
+                            cursor: pointer;
+
+                        }
+
+                        >.edit {
+                            color: rgb(190, 161, 14);
+                            margin: 0 10px;
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+
+        }
+
+        .del {
+            opacity: 0;
+            transform: translateX(-500px);
+            transition: .4s;
+        }
+
+        .line {
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <h1>To Do List</h1>
+        <div>
+            <input type="text" name="" id="inp" placeholder="Add New Task">
+            <button>+</button>
+            <ul id="list"></ul>
+
+        </div>
+    </main>
+</body>
+<script>
+    const inp = document.querySelector('#inp')
+    const btn = document.querySelector('div>button')
+    const list = document.querySelector('#list')
+
+
+    btn.addEventListener('click', () => {
+
+        if (inp.value == '') {
+            alert('Eror!')
+
+        } else {
+            let li = document.createElement('li')
+            li.innerHTML = `
+             <input type="text" name="" id="h2" readonly value="${inp.value}">
+             <input type="checkbox" onclick="tic(this)" class="tic">
+             <span class="icon-pencil edit" onclick="edit(this)" data-status='off'></span>
+             <span class="icon-trash-empty trash" onclick="del(this)"></span>
+            `
+            list.appendChild(li)
+            inp.value = null
+            inp.focus()
+            // inp.focus().style.border='none'
+        }
+    })
+
+
+    const del = (s) => {
+        if (confirm('Are You Sure?')) {
+            s.parentNode.classList.add('del')
+            setTimeout(() => {
+                s.parentNode.remove()
+            }, 1000);
+        }
+    }
+
+    const tic = (s) => {
+        const check = s.checked
+        let temp = s.previousElementSibling
+
+        if (check) {
+            s.setAttribute('checked', '')
+            console.log(check);
+
+            temp.style.textDecoration = "line-through"
+            temp.style.color = "gray"
+            // console.log(temp);
+
+        } else {
+            s.removeAttribute('checked')
+            temp.style.textDecoration = "none"
+            temp.style.color = "white"
+            // console.log(check);
+        }
+
+    }
+
+    const edit = (s) => {
+        if (s.getAttribute('data-status') == 'off') {
+            s.classList.remove('icon-pencil')
+            s.innerHTML = `<span class="icon-ok" style="color: green;"></span>`
+            s.setAttribute('data-status', 'on')
+            s.previousElementSibling.previousElementSibling.removeAttribute('readonly')
+            s.previousElementSibling.previousElementSibling.focus()
+            s.previousElementSibling.previousElementSibling.style.border = '1px solid white'
+        } else {
+            s.innerHTML = `<span class="icon-pencil"></span>`
+            s.setAttribute('data-status', 'off')
+            s.previousElementSibling.previousElementSibling.setAttribute('readonly', '')
+            s.previousElementSibling.previousElementSibling.style.border = 'none'
+        }
+    }
+
+
+</script>
+
+</html>
